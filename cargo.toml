@@ -1,0 +1,25 @@
+[package]
+name = "penjaga"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+pbkdf2 = "0.12"
+sha2 = "0.10"
+rand = "0.8"
+rpassword = "7"
+ureq = "2"
+
+[target.'cfg(windows)'.dependencies]
+tray-icon = "0.14"
+tao = "0.28"
+windows-sys = { version = "0.52", features = ["Win32_System_Console"] }
+
+[profile.release]
+opt-level = "z"
+lto = true
+strip = true
+panic = "abort"
+codegen-units = 1
