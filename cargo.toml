@@ -1,25 +1,28 @@
 [package]
 name = "penjaga"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 
+# Dependensi sengaja minimal: tanpa library TLS/HTTP (unduhan & notifikasi memakai
+# curl bawaan Windows 10+/Linux) agar biner kecil dan permukaan serangan sempit.
 [dependencies]
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-pbkdf2 = "0.12"
-sha2 = "0.10"
-rand = "0.8"
-rpassword = "7"
-ureq = "2"
+pbkdf2 = "0.12"   # hash password (PBKDF2-HMAC-SHA256)
+sha2 = "0.10"     # hash biner untuk cek integritas
+rand = "0.8"      # salt acak
+rpassword = "7"   # input password tanpa tampil di layar
 
+# Hanya Windows: ikon tray + menutup jendela konsol
 [target.'cfg(windows)'.dependencies]
 tray-icon = "0.14"
 tao = "0.28"
 windows-sys = { version = "0.52", features = ["Win32_System_Console"] }
 
+# Catatan: panic TIDAK di-abort; thread DNS memakai catch_unwind agar satu paket
+# jahat tidak mematikan seluruh mesin.
 [profile.release]
 opt-level = "z"
 lto = true
 strip = true
-panic = "abort"
 codegen-units = 1
